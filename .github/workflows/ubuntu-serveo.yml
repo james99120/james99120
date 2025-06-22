@@ -1,0 +1,24 @@
+name: Ubuntu Debug
+
+on: workflow_dispatch
+
+jobs:
+  debug:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360  # Set total runtime to 6 hours
+
+    steps:
+      - name: Install Depencies
+        run: |
+          sudo apt update
+          sudo apt install openssh-server -y
+
+      - name: Essentials
+        run: |
+          echo 'runner:P@ssw0rd1123' | sudo chpasswd
+          sudo mkdir -p /run/sshd && sudo systemctl restart ssh
+          sudo systemctl status ssh
+
+      - name: Start session
+        run: |
+          ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -R 0:127.0.0.1:22 serveo.net
